@@ -65,6 +65,12 @@ public abstract class FinancialSeries<TModel, TVisual, TLabel, TDrawingContext>
     /// <inheritdoc cref="IFinancialSeries{TDrawingContext}.MaxBarWidth"/>
     public double MaxBarWidth { get; set; } = 25;
 
+    /// <summary>
+    /// Spacing around bar. 2*this is the spacing between bars.
+    /// 0 to 1 based on X axis time steps.
+    /// </summary>
+    public float BarMargin { get; set; } = 0;
+
     /// <inheritdoc cref="IFinancialSeries{TDrawingContext}.UpStroke"/>
     public IPaint<TDrawingContext>? UpStroke
     {
@@ -107,7 +113,7 @@ public abstract class FinancialSeries<TModel, TVisual, TLabel, TDrawingContext>
         var previousPrimaryScale = primaryAxis.GetActualScalerScaler(cartesianChart);
         var previousSecondaryScale = secondaryAxis.GetActualScalerScaler(cartesianChart);
 
-        var uw = secondaryScale.MeasureInPixels(secondaryAxis.UnitWidth);
+        var uw = secondaryScale.MeasureInPixels(secondaryAxis.UnitWidth) * ( 1-BarMargin );
         var puw = previousSecondaryScale is null ? 0 : previousSecondaryScale.MeasureInPixels(secondaryAxis.UnitWidth);
         var uwm = 0.5f * uw;
 
@@ -117,6 +123,8 @@ public abstract class FinancialSeries<TModel, TVisual, TLabel, TDrawingContext>
             uwm = uw * 0.5f;
             puw = uw;
         }
+
+        Console.WriteLine($"SecondaryAxis.UnitWidth: {secondaryAxis.UnitWidth} ; uw: {uw} ; uwm: {uwm}");
 
         var actualZIndex = ZIndex == 0 ? ((ISeries)this).SeriesId : ZIndex;
 
