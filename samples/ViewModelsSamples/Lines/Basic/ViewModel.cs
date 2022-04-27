@@ -1,4 +1,6 @@
-﻿using LiveChartsCore;
+﻿using System.Collections.Generic;
+using LiveChartsCore;
+using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 
 namespace ViewModelsSamples.Lines.Basic;
